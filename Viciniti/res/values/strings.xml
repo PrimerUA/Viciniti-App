@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Viciniti</string>
+    <string name="title_section1">All devices</string>
+    <string name="title_section2">With app installed</string>
+    <string name="title_section3">Without app</string>
+    <string name="action_settings">Settings</string>
+    <string name="devices_not_found">Devices not found</string>
+
+</resources>
