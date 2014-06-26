@@ -1,10 +1,16 @@
 package com.svitla.viciniti;
 
+import java.util.ArrayList;
+
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 
 import com.svitla.viciniti.ui.fragments.PlaceholderFragment;
@@ -16,6 +22,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	 * current dropdown position.
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
+
+	private ArrayList<String> mSupervisedDevices;
+	private ArrayList<Integer> mSecurityLevels;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +72,34 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_add_level) {
+			addLevel();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void addLevel() {
+		final View addDialogView = getLayoutInflater().inflate(R.layout.add_security_dialog, null);
+		final AlertDialog addDialog = new AlertDialog.Builder(this).create();
+		addDialog.setView(addDialogView);
+		addDialogView.findViewById(R.id.addButton).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				addDialog.dismiss();
+			}
+		});
+		addDialogView.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				addDialog.dismiss();
+
+			}
+		});
+
+		addDialog.show();
 	}
 
 	@Override
@@ -77,5 +110,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		return true;
 	}
 
+	public ArrayList<String> getSupervisedDevices() {
+		return mSupervisedDevices;
+	}
+
+	public ArrayList<Integer> getSecurityLevels() {
+		return mSecurityLevels;
+	}
 
 }

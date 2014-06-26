@@ -5,7 +5,9 @@
     <string name="title_section1">All devices</string>
     <string name="title_section2">With app installed</string>
     <string name="title_section3">Without app</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_add_level">Add new zone</string>
     <string name="devices_not_found">Devices not found</string>
+    <string name="back">Back</string>
+    <string name="add_text">Add new security zone:</string>
 
 </resources>
