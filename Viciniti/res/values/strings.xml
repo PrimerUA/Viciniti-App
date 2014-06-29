@@ -9,5 +9,8 @@
     <string name="devices_not_found">Devices not found</string>
     <string name="back">Back</string>
     <string name="add_text">Add new security zone:</string>
+    <string name="empty_fields">Fill in empty fields</string>
+    <string name="zone_name_hint">Zone name</string>
+    <string name="zone_level_hint">Security radius (in dBm)</string>
 
 </resources>
