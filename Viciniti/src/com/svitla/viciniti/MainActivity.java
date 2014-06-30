@@ -31,6 +31,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		mSupervisedDevices = new ArrayList<String>();
+		mSecurityLevels = new ArrayList<Integer>();
+		
 		// Set up the action bar to show a dropdown list.
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
