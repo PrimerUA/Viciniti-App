@@ -8,6 +8,8 @@ public class LevelsMonitor {
 	private static ArrayList<Level> levels = new ArrayList<Level>();
 
 	public static ArrayList<Level> getLevels() {
+		if (levels == null)
+			levels = new ArrayList<Level>();
 		return levels;
 	}
 

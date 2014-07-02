@@ -30,7 +30,7 @@ public class LevelsListFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_levels, container, false);
 		mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.add_text);
+		mainActivity.getSupportActionBar().setTitle(R.string.levels_fragment_title);
 		mainActivity.getSupportActionBar().setHomeButtonEnabled(true);
 		mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		

@@ -13,10 +13,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.svitla.viciniti.beans.Level;
+import com.svitla.viciniti.controllers.MenuController;
+import com.svitla.viciniti.controllers.PreferencesController;
 import com.svitla.viciniti.monitor.LevelsMonitor;
 import com.svitla.viciniti.ui.fragments.LevelsListFragment;
 import com.svitla.viciniti.ui.fragments.PlaceholderFragment;
-import com.svitla.viciniti.utils.Preferences;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
 
@@ -28,7 +29,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Preferences.load();
+		PreferencesController.init(this);
 
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -68,50 +69,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		if (id == R.id.action_list_level) {
 			showFragment(VicinityConstants.FRAGMENT_LEVELS);
 		} else if (id == R.id.action_add_level) {
-			addLevel();
+			MenuController.addLevel(this);
 		} else if (id == R.id.action_scan_controller) {
-			toggleScan();
+			MenuController.toggleScan(this);
 		} else {
 			showFragment(VicinityConstants.FRAGMENT_MAIN);
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void toggleScan() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void addLevel() {
-		final View addDialogView = getLayoutInflater().inflate(R.layout.add_security_dialog, null);
-		final EditText name = (EditText) addDialogView.findViewById(R.id.nameSecurityEdit);
-		final EditText strength = (EditText) addDialogView.findViewById(R.id.levelSecurityEdit);
-		final AlertDialog addDialog = new AlertDialog.Builder(this).create();
-		addDialog.setView(addDialogView);
-		addDialogView.findViewById(R.id.addButton).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (("").equals(name.getText().toString()) || ("").equals(strength.getText().toString()))
-					Toast.makeText(MainActivity.this, getString(R.string.empty_fields), Toast.LENGTH_SHORT).show();
-				else {
-					Level level = new Level(name.getText().toString(), Integer.valueOf(strength.getText().toString()));
-					LevelsMonitor.getLevels().add(level);
-					Preferences.save();
-					addDialog.dismiss();
-					((LevelsListFragment) getSupportFragmentManager().findFragmentById(R.layout.fragment_levels)).refreshList();
-				}
-			}
-		});
-		addDialogView.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				addDialog.dismiss();
-			}
-		});
-
-		addDialog.show();
 	}
 
 	public void showFragment(int i) {
