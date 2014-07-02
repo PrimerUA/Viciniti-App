@@ -11,5 +11,10 @@ public class LevelsMonitor {
 		return levels;
 	}
 
-
+	public static ArrayList<String> getInfo() {
+		ArrayList<String> arrayList = new ArrayList<String>();
+		for (int i = 0; i < levels.size(); i++)
+			arrayList.add(levels.get(i).getName() + " - " + " RSSI: " + levels.get(i).getLevel().toString() + "dBm");
+		return arrayList;
+	}
 }

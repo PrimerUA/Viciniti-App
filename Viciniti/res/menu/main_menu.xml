@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.svitla.viciniti.MainActivity" >
+
+    <group android:id="@+id/groupVsbl" >
+        <item
+            android:id="@+id/action_scan_controller"
+            android:icon="@android:drawable/ic_popup_sync"
+            android:orderInCategory="100"
+            android:title="@string/action_scan_controller"
+            app:showAsAction="always"/>
+        <item
+            android:id="@+id/action_list_level"
+            android:icon="@android:drawable/ic_menu_more"
+            android:orderInCategory="100"
+            android:title="@string/action_list_level"
+            app:showAsAction="always"/>
+    </group>
+
+</menu>
