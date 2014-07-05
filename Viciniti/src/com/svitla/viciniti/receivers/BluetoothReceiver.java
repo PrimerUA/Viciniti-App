@@ -1,9 +1,7 @@
 package com.svitla.viciniti.receivers;
 
-import com.svitla.viciniti.beans.Device;
 import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.DevicesController;
-import com.svitla.viciniti.controllers.PreferencesController;
 import com.svitla.viciniti.monitor.DevicesMonitor;
 import com.svitla.viciniti.monitor.LevelsMonitor;
 
@@ -32,18 +30,14 @@ public class BluetoothReceiver extends BroadcastReceiver {
 		if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 			short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
 			BluetoothDevice bDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-			if (DevicesMonitor.isSupervisedDevice(bDevice.getName())) {
-				Device device = new Device(bDevice, rssi, true);
-				DevicesMonitor.getDevices().add(device);
-			} else {
-				Device device = new Device(bDevice, rssi, false);
-				DevicesMonitor.getDevices().add(device);
+			if (!DevicesMonitor.getDevices().contains(bDevice)) {
+				DevicesMonitor.getDevices().add(bDevice);
 			}
-			PreferencesController.save();
 			mArrayAdapter.add(bDevice.getName() + " - " + " RSSI: " + rssi + "dBm");
 			bluetoothListView.setAdapter(mArrayAdapter);
 			if (DevicesMonitor.getSupervisedDevices().size() > 0 && LevelsMonitor.getLevels().size() > 0)
-				DevicesController.checkSupervisedDevices(context, rssi);
+				DevicesController.checkSupervisedDevices(context, rssi, bDevice);
+			Toast.makeText(context, "Data updated", Toast.LENGTH_SHORT).show();
 		} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 			Toast.makeText(context, "Discovery round finished", Toast.LENGTH_SHORT).show();
 			mArrayAdapter.clear();

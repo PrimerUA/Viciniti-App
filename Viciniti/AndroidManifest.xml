@@ -7,6 +7,8 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -35,6 +37,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="com.svitla.viciniti.receivers.AlertReceiver" >
+            <intent-filter>
+                <action android:name="com.example.Broadcast" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

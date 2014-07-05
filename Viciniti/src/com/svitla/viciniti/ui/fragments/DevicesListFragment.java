@@ -29,13 +29,13 @@ import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.DevicesController;
 import com.svitla.viciniti.receivers.BluetoothReceiver;
 
-public class PlaceholderFragment extends Fragment implements OnRefreshListener {
+public class DevicesListFragment extends Fragment  {
 
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	protected int REQUEST_ENABLE_BT = 1;
 
-	public static PlaceholderFragment newInstance(int sectionNumber) {
-		PlaceholderFragment fragment = new PlaceholderFragment();
+	public static DevicesListFragment newInstance(int sectionNumber) {
+		DevicesListFragment fragment = new DevicesListFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
@@ -46,31 +46,28 @@ public class PlaceholderFragment extends Fragment implements OnRefreshListener {
 
 	private ListView mBluetoothListView;
 	private ArrayAdapter<String> mArrayAdapter;
-	private SwipeRefreshLayout mRefreshLayout;
 
 	private BluetoothAdapter mBluetoothAdapter;
 	private BroadcastReceiver mReceiver;
 
 	public static ArrayList<BluetoothDevice> myBTDevices = new ArrayList<BluetoothDevice>();
 
-	public PlaceholderFragment() {
+	public DevicesListFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_devices, container, false);
 		mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.placeholder_fragment_title);
+		mainActivity.getSupportActionBar().setHomeButtonEnabled(false);
+		mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-		mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
 		mBluetoothListView = (ListView) rootView.findViewById(R.id.listView);
 		mArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
 
-		mRefreshLayout.setColorScheme(android.R.color.background_light, android.R.color.black, android.R.color.white, android.R.color.black);
-		mRefreshLayout.setOnRefreshListener(this);
-
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		BluetoothController.init(getActivity(), mBluetoothAdapter, mRefreshLayout);
+		BluetoothController.init(getActivity(), mBluetoothAdapter, mainActivity.getRefreshLayout());
 		
 		if (!mBluetoothAdapter.isEnabled()) {
 			Log.v("onCreate", "Bluetooth Adapter off");
@@ -107,11 +104,9 @@ public class PlaceholderFragment extends Fragment implements OnRefreshListener {
 	}
 
 	@Override
-	public void onRefresh() {
-		if (!BluetoothController.isScanning())
-			BluetoothController.scanBluetooth();
-		else
-			Toast.makeText(getActivity(), "Launch scanner befor refreshing.", Toast.LENGTH_SHORT).show();
+	public void onDestroy() {
+		super.onDestroy();
+		getActivity().unregisterReceiver(mReceiver);
 	}
 
 }

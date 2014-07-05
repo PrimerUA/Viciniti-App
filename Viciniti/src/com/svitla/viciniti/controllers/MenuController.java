@@ -28,13 +28,15 @@ public class MenuController {
 				if (("").equals(name.getText().toString()) || ("").equals(strength.getText().toString()))
 					Toast.makeText(activity, activity.getString(R.string.empty_fields), Toast.LENGTH_SHORT).show();
 				else {
-					Level level = new Level(name.getText().toString(), Integer.valueOf(strength.getText().toString()));
-					LevelsMonitor.getLevels().add(level);
-					PreferencesController.save();
-					LevelsListFragment levelsListFragment = (LevelsListFragment) activity.getSupportFragmentManager()
-							.findFragmentById(R.id.container);
-					levelsListFragment.refreshList();
-					addDialog.dismiss();
+					if (isUniqueLevel(Integer.valueOf(strength.getText().toString()))) {
+						Level level = new Level(name.getText().toString(), Integer.valueOf(strength.getText().toString()));
+						LevelsMonitor.getLevels().add(level);
+						LevelsListFragment levelsListFragment = (LevelsListFragment) activity.getSupportFragmentManager().findFragmentById(R.id.container);
+						levelsListFragment.refreshList();
+						addDialog.dismiss();
+					} else {
+						Toast.makeText(activity, "Zone strength is not unique", Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
@@ -45,8 +47,14 @@ public class MenuController {
 				addDialog.dismiss();
 			}
 		});
-
 		addDialog.show();
+	}
+
+	protected static boolean isUniqueLevel(Integer level) {
+		for (int i = 0; i < LevelsMonitor.getLevels().size(); i++)
+			if (LevelsMonitor.getLevels().get(i).getLevel().equals(level))
+				return false;
+		return true;
 	}
 
 	public static void toggleScan(Context context) {

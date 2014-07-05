@@ -6,7 +6,7 @@
     <group android:id="@+id/groupVsbl" >
         <item
             android:id="@+id/action_scan_controller"
-            android:icon="@android:drawable/ic_popup_sync"
+            android:icon="@android:drawable/ic_media_pause"
             android:orderInCategory="100"
             android:title="@string/action_scan_controller"
             app:showAsAction="always"/>

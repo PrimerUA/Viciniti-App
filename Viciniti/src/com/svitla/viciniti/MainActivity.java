@@ -1,28 +1,26 @@
 package com.svitla.viciniti;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.svitla.viciniti.beans.Level;
+import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.MenuController;
 import com.svitla.viciniti.controllers.PreferencesController;
-import com.svitla.viciniti.monitor.LevelsMonitor;
 import com.svitla.viciniti.ui.fragments.LevelsListFragment;
-import com.svitla.viciniti.ui.fragments.PlaceholderFragment;
+import com.svitla.viciniti.ui.fragments.DevicesListFragment;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener, OnRefreshListener {
 
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	private static int currentFragment;
+	private SwipeRefreshLayout mRefreshLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +30,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		PreferencesController.init(this);
 
 		final ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		actionBar.setListNavigationCallbacks(new ArrayAdapter<String>(actionBar.getThemedContext(), android.R.layout.simple_list_item_1, android.R.id.text1,
-				new String[] { getString(R.string.title_section1), getString(R.string.title_section2), getString(R.string.title_section3), }), this);
-
+//		actionBar.setDisplayShowTitleEnabled(false);
+//		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//		actionBar.setListNavigationCallbacks(new ArrayAdapter<String>(actionBar.getThemedContext(), android.R.layout.simple_list_item_1, android.R.id.text1,
+//				new String[] { getString(R.string.title_section1), getString(R.string.title_section2), getString(R.string.title_section3), }), this);
+		showFragment(1);
+		mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+		mRefreshLayout.setColorScheme(android.R.color.background_light, android.R.color.black, android.R.color.white, android.R.color.black);
+		mRefreshLayout.setOnRefreshListener(this);
 	}
 
 	@Override
@@ -72,6 +73,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 			MenuController.addLevel(this);
 		} else if (id == R.id.action_scan_controller) {
 			MenuController.toggleScan(this);
+			if (BluetoothController.isScanning())
+				item.setIcon(android.R.drawable.ic_media_pause);
+			else
+				item.setIcon(android.R.drawable.ic_media_play);
 		} else {
 			showFragment(VicinityConstants.FRAGMENT_MAIN);
 		}
@@ -87,9 +92,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 			break;
 		case VicinityConstants.FRAGMENT_MAIN:
 			currentFragment = VicinityConstants.FRAGMENT_MAIN;
-			getSupportFragmentManager().beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(VicinityConstants.FRAGMENT_MAIN)).commit();
+			getSupportFragmentManager().beginTransaction().replace(R.id.container, DevicesListFragment.newInstance(VicinityConstants.FRAGMENT_MAIN)).commit();
 			supportInvalidateOptionsMenu();
 			break;
+		default:
+			Toast.makeText(this, "Not ready yet", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -101,8 +108,32 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		return true;
 	}
 
+	@Override
+	public void onRefresh() {
+		if (!BluetoothController.isScanning())
+			BluetoothController.scanBluetooth();
+		else
+			Toast.makeText(this, "Already scaninng", Toast.LENGTH_SHORT).show();
+	}
+
 	public static int getCurrentFragment() {
 		return currentFragment;
+	}
+
+	public SwipeRefreshLayout getRefreshLayout() {
+		return mRefreshLayout;
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		PreferencesController.save();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		PreferencesController.load();
 	}
 
 }
