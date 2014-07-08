@@ -34,7 +34,7 @@ public class DevicesController {
 		w.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		w.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 		
-		String message = "Device with name - " + bluetoothDevice.getName() + " has breached zone named - " + securityLevel.getName() + " ("
+		String message = "Device with name - " + bluetoothDevice.getName() + " has breached the zone named - " + securityLevel.getName() + " ("
 				+ securityLevel.getLevel() + " dBm)";
 		
 		Intent intent = new Intent();
@@ -64,6 +64,7 @@ public class DevicesController {
 		final BluetoothDevice bluetoothDevice = DevicesMonitor.getDevices().get(number);
 		if (!DevicesMonitor.getSupervisedDevices().contains(bluetoothDevice)) {
 			alertDialogBuilder.setTitle("Start supervising this device?");
+			alertDialogBuilder.setMessage(bluetoothDevice.getName());
 			alertDialogBuilder.setCancelable(false).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					DevicesMonitor.getSupervisedDevices().add(bluetoothDevice);
@@ -78,6 +79,7 @@ public class DevicesController {
 			alertDialog.show();
 		} else {
 			alertDialogBuilder.setTitle("Stop supervising this device?");
+			alertDialogBuilder.setMessage(bluetoothDevice.getName());
 			alertDialogBuilder.setCancelable(false).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					DevicesMonitor.getSupervisedDevices().remove(bluetoothDevice);
