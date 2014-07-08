@@ -4,6 +4,13 @@
     tools:context="com.svitla.viciniti.LevelsListActivity" >
 
     <item
+        android:id="@+id/action_device_status"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:orderInCategory="100"
+        android:title="@string/action_add_level"
+        app:showAsAction="always"/>
+    
+    <item
         android:id="@+id/action_add_level"
         android:icon="@android:drawable/ic_input_add"
         android:orderInCategory="100"

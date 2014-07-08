@@ -10,11 +10,14 @@
     <string name="action_add_level">Add new zone</string>
     <string name="action_list_level">Browse zones</string>
     <string name="action_scan_controller">Toggle scan</string>
+    <string name="action_device_status">Device status</string>
     <string name="devices_not_found">Devices not found</string>
     <string name="back">Back</string>
     <string name="add_text">Add new security zone:</string>
     <string name="empty_fields">Fill in empty fields</string>
     <string name="zone_name_hint">Zone name</string>
     <string name="zone_level_hint">Security radius (in dBm)</string>
+    <string name="gps_text">GPS data:</string>
+    <string name="accelerometer_text">Accelerometer data:</string>
 
 </resources>
