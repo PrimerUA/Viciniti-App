@@ -1,5 +1,7 @@
 package com.svitla.viciniti;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -7,15 +9,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.svitla.viciniti.controllers.BluetoothController;
-import com.svitla.viciniti.controllers.DataController;
 import com.svitla.viciniti.controllers.MenuController;
+import com.svitla.viciniti.controllers.PlotController;
 import com.svitla.viciniti.controllers.PreferencesController;
+import com.svitla.viciniti.ui.fragments.DeviceDetailsFragment;
+import com.svitla.viciniti.ui.fragments.DeviceListFragment;
 import com.svitla.viciniti.ui.fragments.LevelsListFragment;
-import com.svitla.viciniti.ui.fragments.DevicesListFragment;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener, OnRefreshListener {
 
@@ -30,7 +32,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 	PreferencesController.init(this);
 
-	final ActionBar actionBar = getSupportActionBar();
+	// final ActionBar actionBar = getSupportActionBar();
 	// actionBar.setDisplayShowTitleEnabled(false);
 	// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 	// actionBar.setListNavigationCallbacks(new
@@ -39,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	// new String[] { getString(R.string.title_section1),
 	// getString(R.string.title_section2),
 	// getString(R.string.title_section3), }), this);
-	showFragment(1);
+	showFragment(VicinityConstants.FRAGMENT_MAIN, 0);
 	mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
 	mRefreshLayout.setColorScheme(android.R.color.background_light, android.R.color.black, android.R.color.white, android.R.color.black);
 	mRefreshLayout.setOnRefreshListener(this);
@@ -73,7 +75,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public boolean onOptionsItemSelected(MenuItem item) {
 	int id = item.getItemId();
 	if (id == R.id.action_list_level) {
-	    showFragment(VicinityConstants.FRAGMENT_LEVELS);
+	    showFragment(VicinityConstants.FRAGMENT_LEVELS, 0);
 	} else if (id == R.id.action_add_level) {
 	    MenuController.addLevel(this);
 	} else if (id == R.id.action_scan_controller) {
@@ -85,21 +87,29 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	} else if (id == R.id.action_device_status) {
 	    MenuController.deviceStatus(this);
 	} else {
-	    showFragment(VicinityConstants.FRAGMENT_MAIN);
+	    showFragment(VicinityConstants.FRAGMENT_MAIN, 0);
 	}
 	return super.onOptionsItemSelected(item);
     }
 
-    public void showFragment(int i) {
+    public void showFragment(int i, int extra) {
 	switch (i) {
 	case VicinityConstants.FRAGMENT_LEVELS:
+	    PlotController.setActive(false);
 	    currentFragment = VicinityConstants.FRAGMENT_LEVELS;
 	    getSupportFragmentManager().beginTransaction().replace(R.id.container, LevelsListFragment.newInstance(VicinityConstants.FRAGMENT_LEVELS)).commit();
 	    supportInvalidateOptionsMenu();
 	    break;
 	case VicinityConstants.FRAGMENT_MAIN:
+	    PlotController.setActive(false);
 	    currentFragment = VicinityConstants.FRAGMENT_MAIN;
-	    getSupportFragmentManager().beginTransaction().replace(R.id.container, DevicesListFragment.newInstance(VicinityConstants.FRAGMENT_MAIN)).commit();
+	    getSupportFragmentManager().beginTransaction().replace(R.id.container, DeviceListFragment.newInstance(VicinityConstants.FRAGMENT_MAIN)).commit();
+	    supportInvalidateOptionsMenu();
+	    break;
+	case VicinityConstants.FRAGMENT_DETAILS:
+	    PlotController.setActive(true);
+	    currentFragment = VicinityConstants.FRAGMENT_DETAILS;
+	    getSupportFragmentManager().beginTransaction().replace(R.id.container, DeviceDetailsFragment.newInstance(extra)).commit();
 	    supportInvalidateOptionsMenu();
 	    break;
 	default:
@@ -111,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public boolean onNavigationItemSelected(int position, long id) {
 	// When the given dropdown item is selected, show its contents in the
 	// container view.
-	showFragment(position + 1);
+	showFragment(position + 1, 0);
 	return true;
     }
 
@@ -141,6 +151,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     protected void onResume() {
 	super.onResume();
 	PreferencesController.load();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	if (requestCode == VicinityConstants.REQUEST_ENABLE_BT && resultCode == Activity.RESULT_OK) {
+	    BluetoothController.scanBluetooth();
+	}
     }
 
 }
