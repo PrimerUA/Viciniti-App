@@ -3,6 +3,7 @@ package com.svitla.viciniti;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.ActionBar;
@@ -11,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.MenuController;
 import com.svitla.viciniti.controllers.PlotController;
@@ -31,6 +34,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	setContentView(R.layout.activity_main);
 
 	PreferencesController.init(this);
+	ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(this);
+	ImageLoader.getInstance().init(config);
 
 	// final ActionBar actionBar = getSupportActionBar();
 	// actionBar.setDisplayShowTitleEnabled(false);
@@ -156,6 +161,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	if (requestCode == VicinityConstants.REQUEST_ENABLE_BT && resultCode == Activity.RESULT_OK) {
 	    BluetoothController.scanBluetooth();
+	}
+	if (requestCode == VicinityConstants.GPS_ENABLED_CODE) {
+	    Toast.makeText(this, "GPS enabled, waiting for location...", Toast.LENGTH_SHORT).show();
+	}
+	if (requestCode == VicinityConstants.TAKE_PHOTO_CODE && resultCode == Activity.RESULT_OK) {
+	    PreferencesController.PhotoSaver.setUri(data.getExtras().get(MediaStore.EXTRA_OUTPUT).toString());
 	}
     }
 

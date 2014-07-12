@@ -1,7 +1,5 @@
 package com.svitla.viciniti.beans;
 
-import android.bluetooth.BluetoothDevice;
-
 public class Signal {
 
     private short rssi;

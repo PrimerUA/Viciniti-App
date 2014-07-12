@@ -20,5 +20,6 @@
     <string name="zone_level_hint">Security radius (in dBm)</string>
     <string name="gps_text">GPS data:</string>
     <string name="accelerometer_text">Accelerometer data:</string>
+    <string name="choose_photo_text">Take photo</string>
 
 </resources>

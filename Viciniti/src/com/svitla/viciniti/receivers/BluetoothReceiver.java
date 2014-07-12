@@ -38,17 +38,25 @@ public class BluetoothReceiver extends BroadcastReceiver {
 	    if (!DevicesMonitor.getDevices().contains(bDevice)) {
 		DevicesMonitor.getDevices().add(bDevice);
 	    }
-	    for (int i = 0; i < SignalMonitor.getMonitorArray().size(); i++)
-		if (SignalMonitor.getMonitorArray().get(i).getBluetoothDevice().equals(bDevice))
-		    SignalMonitor.getMonitorArray().get(i).getSignalArray().add(new Signal(rssi));
-		else {
-		    SignalArray newSignalArray = new SignalArray();
-		    newSignalArray.setBluetoothDevice(bDevice);
-		    ArrayList<Signal> signals = new ArrayList<Signal>();
-		    signals.add(new Signal(rssi));
-		    newSignalArray.setSignalArray(signals);
-		    SignalMonitor.getMonitorArray().add(newSignalArray);
-		}
+	    if (SignalMonitor.getMonitorArray().size() == 0) {
+		SignalArray newSignalArray = new SignalArray();
+		newSignalArray.setBluetoothDevice(bDevice);
+		ArrayList<Signal> signals = new ArrayList<Signal>();
+		signals.add(new Signal(rssi));
+		newSignalArray.setSignalArray(signals);
+		SignalMonitor.getMonitorArray().add(newSignalArray);
+	    } else
+		for (int i = 0; i < SignalMonitor.getMonitorArray().size(); i++)
+		    if (SignalMonitor.getMonitorArray().get(i).getBluetoothDevice().equals(bDevice))
+			SignalMonitor.getMonitorArray().get(i).getSignalArray().add(new Signal(rssi));
+		    else {
+			SignalArray newSignalArray = new SignalArray();
+			newSignalArray.setBluetoothDevice(bDevice);
+			ArrayList<Signal> signals = new ArrayList<Signal>();
+			signals.add(new Signal(rssi));
+			newSignalArray.setSignalArray(signals);
+			SignalMonitor.getMonitorArray().add(newSignalArray);
+		    }
 	    if (PlotController.isActive())
 		PlotController.updateData();
 	    mArrayAdapter.add(bDevice.getName() + " - " + " RSSI: " + rssi + "dBm");

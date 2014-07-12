@@ -1,5 +1,7 @@
 package com.svitla.viciniti.controllers;
 
+import com.svitla.viciniti.VicinityConstants;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,18 +13,19 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DataController {
 
-    public static void requestGPSData(Context context, final TextView name, final ProgressBar progressBar) {
+    public static void requestGPSData(ActionBarActivity activity, final TextView name, final ProgressBar progressBar) {
 	progressBar.setVisibility(View.VISIBLE);
-	LocationManager locationManager = (LocationManager) context.getSystemService(Service.LOCATION_SERVICE);
+	LocationManager locationManager = (LocationManager) activity.getSystemService(Service.LOCATION_SERVICE);
 	if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 	    Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	    context.startActivity(callGPSSettingIntent);
+	    activity.startActivityForResult(callGPSSettingIntent, VicinityConstants.GPS_ENABLED_CODE);
 	}
 	final Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 	if (location == null && locationManager != null) {
