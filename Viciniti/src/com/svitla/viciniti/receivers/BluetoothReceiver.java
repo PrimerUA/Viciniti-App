@@ -47,7 +47,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 		SignalMonitor.getMonitorArray().add(newSignalArray);
 	    } else
 		for (int i = 0; i < SignalMonitor.getMonitorArray().size(); i++)
-		    if (SignalMonitor.getMonitorArray().get(i).getBluetoothDevice().equals(bDevice))
+		    if (SignalMonitor.getMonitorArray().get(i).getBluetoothDevice().equals(bDevice)) // ==
 			SignalMonitor.getMonitorArray().get(i).getSignalArray().add(new Signal(rssi));
 		    else {
 			SignalArray newSignalArray = new SignalArray();
