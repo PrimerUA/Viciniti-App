@@ -59,7 +59,7 @@ public class DevicesController {
 		alertDialog.show();
 	}
 
-	public static void superviseDevice(final Context context, final ArrayAdapter<String> arrayAdapter, int number) {
+	public static void superviseDevice(final Context context, int number) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		final BluetoothDevice bluetoothDevice = DevicesMonitor.getDevices().get(number);
 		if (!DevicesMonitor.getSupervisedDevices().contains(bluetoothDevice)) {

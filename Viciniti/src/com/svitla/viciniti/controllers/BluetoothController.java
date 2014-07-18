@@ -1,14 +1,20 @@
 package com.svitla.viciniti.controllers;
 
+import com.svitla.viciniti.R;
+
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class BluetoothController {
 	private static Context context;
 	private static BluetoothAdapter bluetoothAdapter;
 	private static SwipeRefreshLayout refreshLayout;
+	private static ListView bluetoothListView;
+	private static ArrayAdapter<String> mArrayAdapter;
 	
 	private static boolean isScanning;
 	
@@ -17,6 +23,11 @@ public class BluetoothController {
 		BluetoothController.bluetoothAdapter = bluetoothAdapter;
 		BluetoothController.refreshLayout = refreshLayout;
 		isScanning = false;
+		BluetoothController.mArrayAdapter = new ArrayAdapter<String>(context, R.layout.list_item);
+	}
+	
+	public static void setBluetoothListView(ListView bluetoothListView) {
+		BluetoothController.bluetoothListView = bluetoothListView;
 	}
 
 	public static void scanBluetooth() {
@@ -41,6 +52,15 @@ public class BluetoothController {
 	
 	public static boolean isScanning() {
 		return isScanning;
+	}
+
+	public static void updateDeviceList(String deviceInfo) {
+		mArrayAdapter.add(deviceInfo);
+		bluetoothListView.setAdapter(mArrayAdapter);
+	}
+
+	public static ArrayAdapter<String> getArrayAdapter() {
+		return mArrayAdapter;
 	}
 
 }

@@ -1,13 +1,20 @@
 package com.svitla.viciniti;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,7 +26,7 @@ import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.MenuController;
 import com.svitla.viciniti.controllers.PlotController;
 import com.svitla.viciniti.controllers.PreferencesController;
-import com.svitla.viciniti.ui.fragments.DeviceDetailsFragment;
+import com.svitla.viciniti.receivers.BluetoothReceiver;
 import com.svitla.viciniti.ui.fragments.DeviceListFragment;
 import com.svitla.viciniti.ui.fragments.LevelsListFragment;
 
@@ -27,7 +34,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	private static int currentFragment;
+
 	private SwipeRefreshLayout mRefreshLayout;
+
+	private BluetoothAdapter mBluetoothAdapter;
+	private BroadcastReceiver mReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,22 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(this);
 		ImageLoader.getInstance().init(config);
 
+		mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+		mRefreshLayout.setColorSchemeColors(Color.YELLOW, Color.BLACK, Color.WHITE, Color.BLACK);
+		mRefreshLayout.setOnRefreshListener(this);
+
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		BluetoothController.init(this, mBluetoothAdapter, mRefreshLayout);
+
+		if (!mBluetoothAdapter.isEnabled()) {
+			Log.v("onCreate", "Bluetooth Adapter off");
+			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableBtIntent, VicinityConstants.REQUEST_ENABLE_BT);
+		} else {
+			Log.v("onCreate", "Bluetooth adapter is on");
+			BluetoothController.scanBluetooth();
+		}
+
 		// final ActionBar actionBar = getSupportActionBar();
 		// actionBar.setDisplayShowTitleEnabled(false);
 		// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -48,10 +75,17 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		// new String[] { getString(R.string.title_section1),
 		// getString(R.string.title_section2),
 		// getString(R.string.title_section3), }), this);
+
 		showFragment(VicinityConstants.FRAGMENT_MAIN, 0);
-		mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
-		mRefreshLayout.setColorScheme(android.R.color.background_light, android.R.color.black, android.R.color.white, android.R.color.black);
-		mRefreshLayout.setOnRefreshListener(this);
+
+		mReceiver = new BluetoothReceiver();
+
+		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+		registerReceiver(mReceiver, filter);
+		IntentFilter discoveryFinished = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		registerReceiver(mReceiver, discoveryFinished);
+		IntentFilter rssiChanged = new IntentFilter(WifiManager.RSSI_CHANGED_ACTION);
+		registerReceiver(mReceiver, rssiChanged);
 	}
 
 	@Override
@@ -113,12 +147,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 			getSupportFragmentManager().beginTransaction().replace(R.id.container, DeviceListFragment.newInstance(VicinityConstants.FRAGMENT_MAIN)).commit();
 			supportInvalidateOptionsMenu();
 			break;
-		case VicinityConstants.FRAGMENT_DETAILS:
-			PlotController.setActive(true);
-			currentFragment = VicinityConstants.FRAGMENT_DETAILS;
-			getSupportFragmentManager().beginTransaction().replace(R.id.container, DeviceDetailsFragment.newInstance(extra)).commit();
-			supportInvalidateOptionsMenu();
-			break;
 		default:
 			Toast.makeText(this, "Not ready yet", Toast.LENGTH_SHORT).show();
 		}
@@ -148,6 +176,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		return mRefreshLayout;
 	}
 
+	public BluetoothAdapter getBluetoothAdapter() {
+		return mBluetoothAdapter;
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -161,15 +193,27 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == VicinityConstants.REQUEST_ENABLE_BT && resultCode == Activity.RESULT_OK) {
 			BluetoothController.scanBluetooth();
 		}
 		if (requestCode == VicinityConstants.GPS_ENABLED_CODE) {
 			Toast.makeText(this, "GPS enabled, waiting for location...", Toast.LENGTH_SHORT).show();
 		}
-		if (requestCode == VicinityConstants.TAKE_PHOTO_CODE && resultCode == Activity.RESULT_OK) {
-			PreferencesController.PhotoSaver.setUri(data.getExtras().get(MediaStore.EXTRA_OUTPUT).toString());
-		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (currentFragment != VicinityConstants.FRAGMENT_MAIN)
+			showFragment(VicinityConstants.FRAGMENT_MAIN, 0);
+		else
+			finish();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(mReceiver);
 	}
 
 }

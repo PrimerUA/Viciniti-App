@@ -21,5 +21,6 @@
     <string name="gps_text">GPS data:</string>
     <string name="accelerometer_text">Accelerometer data:</string>
     <string name="choose_photo_text">Take photo</string>
+    <string name="closeButtonText">Close plot</string>
 
 </resources>

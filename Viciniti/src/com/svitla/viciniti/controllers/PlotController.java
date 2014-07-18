@@ -1,13 +1,14 @@
 package com.svitla.viciniti.controllers;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.jjoe64.graphview.BarGraphView;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
+import com.svitla.viciniti.R;
 import com.svitla.viciniti.VicinityConstants;
 import com.svitla.viciniti.beans.SignalArray;
 import com.svitla.viciniti.monitor.SignalMonitor;
@@ -19,28 +20,27 @@ public class PlotController {
 	private static GraphView graphView;
 	private static GraphViewSeries strengthSeries;
 	private static LinearLayout contentLayout;
-	private static int columnQuantity = 0;
+	private static int columnQuantity;
 	private static SignalArray localSignalArray;
-	private static int number;
+	private static BluetoothDevice bluetoothDevice;
 
-	public static void init(Context context, LinearLayout layout, int arrayListNumber) {
-		if (SignalMonitor.getMonitorArray().size() > arrayListNumber) {
-			localSignalArray = SignalMonitor.getMonitorArray().get(arrayListNumber);
+	public static void init(Context context, BluetoothDevice bDevice, LinearLayout layout) {
+			isActive = true;
+			columnQuantity = 0;
 			contentLayout = layout;
-			number = arrayListNumber;
-			graphView = new BarGraphView(context, "Bluetooth data plot for device: " + localSignalArray.getBluetoothDevice().getName());
+			bluetoothDevice = bDevice;
+			localSignalArray = SignalMonitor.getArrayByDevice(bDevice);
+			graphView = new BarGraphView(context, localSignalArray.getBluetoothDevice().getName());
+			graphView.getGraphViewStyle().setTextSize(context.getResources().getDimension(R.dimen.d15p));
 			GraphViewData data = new GraphViewData(columnQuantity++, localSignalArray.getSignalArray().get(0).getRssi());
-			strengthSeries = new GraphViewSeries(new GraphViewData[] {data});
+			strengthSeries = new GraphViewSeries(new GraphViewData[] { data });
 			buildGraph();
-		} else {
-			Toast.makeText(context, "No data yet", Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	public static void updateData() {
 		if (graphView != null)
 			contentLayout.removeView(graphView);
-		localSignalArray = SignalMonitor.getMonitorArray().get(number);
+		localSignalArray = SignalMonitor.getArrayByDevice(bluetoothDevice);
 		buildGraph();
 	}
 
