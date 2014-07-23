@@ -99,7 +99,7 @@ public class MenuController {
 	}
 
 	protected static void choosePhoto(ActionBarActivity activity) {
-		File file = new File(Environment.getExternalStorageDirectory().getPath() + "/viciniti/photos/avatar.jpg");
+		File file = new File(VicinityConstants.VICINITI_DIR + "photos/avatar.jpg");
 		if (!file.exists() && file.getParentFile().mkdirs())
 			try {
 				file.createNewFile();

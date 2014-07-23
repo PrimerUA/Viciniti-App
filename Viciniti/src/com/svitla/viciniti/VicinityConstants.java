@@ -1,5 +1,7 @@
 package com.svitla.viciniti;
 
+import android.os.Environment;
+
 public class VicinityConstants {
 
     public final static int REQUEST_ENABLE_BT = 100;
@@ -12,5 +14,7 @@ public class VicinityConstants {
     public final static int PLOT_COLUMNS_NUMBER = 10;
 
     public final static String ALERT_MESSAGE = "alert-message";
+    
+    public final static String VICINITI_DIR = Environment.getExternalStorageDirectory().getPath() + "/viciniti/";
 
 }

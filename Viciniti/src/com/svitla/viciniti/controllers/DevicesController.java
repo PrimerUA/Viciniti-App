@@ -33,15 +33,15 @@ public class DevicesController {
 		w.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 		w.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		w.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-		
+
 		String message = "Device with name - " + bluetoothDevice.getName() + " has breached the zone named - " + securityLevel.getName() + " ("
 				+ securityLevel.getLevel() + " dBm)";
-		
+
 		Intent intent = new Intent();
 		intent.setAction("com.example.Broadcast");
 		intent.putExtra(VicinityConstants.ALERT_MESSAGE, message);
 		context.sendBroadcast(intent);
-		
+
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setTitle("Security alert!");
 		alertDialogBuilder.setMessage(message);

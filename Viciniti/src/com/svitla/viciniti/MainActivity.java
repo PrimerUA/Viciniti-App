@@ -55,6 +55,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		mRefreshLayout.setOnRefreshListener(this);
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		if (mBluetoothAdapter == null) {
+			Toast.makeText(this, "No bluetooth adapter on this device!", Toast.LENGTH_SHORT).show();
+			finish();
+		}
 		BluetoothController.init(this, mBluetoothAdapter, mRefreshLayout);
 
 		if (!mBluetoothAdapter.isEnabled()) {
@@ -163,9 +167,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	@Override
 	public void onRefresh() {
 		if (!BluetoothController.isScanning())
-			BluetoothController.scanBluetooth();
+			Toast.makeText(this, "Tap play in the Action bar menu to start scanning", Toast.LENGTH_SHORT).show();
 		else
-			Toast.makeText(this, "Already scaninng", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Already scanning", Toast.LENGTH_SHORT).show();
 	}
 
 	public static int getCurrentFragment() {
