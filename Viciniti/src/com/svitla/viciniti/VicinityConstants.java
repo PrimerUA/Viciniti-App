@@ -3,6 +3,8 @@ package com.svitla.viciniti;
 import android.os.Environment;
 
 public class VicinityConstants {
+    
+    public final static int DISCOVERABLE_DURATION = 0; // always discoverable
 
     public final static int REQUEST_ENABLE_BT = 100;
     public final static int TAKE_PHOTO_CODE = 101;

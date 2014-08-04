@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.svitla.viciniti.VicinityConstants;
@@ -57,6 +56,7 @@ public class DevicesController {
 				alertDialog.dismiss();
 		alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
+		LogController.appendFile(message);
 	}
 
 	public static void superviseDevice(final Context context, int number) {
@@ -69,6 +69,7 @@ public class DevicesController {
 				public void onClick(DialogInterface dialog, int id) {
 					DevicesMonitor.getSupervisedDevices().add(bluetoothDevice);
 					Toast.makeText(context, "Started supervising " + bluetoothDevice.getName(), Toast.LENGTH_SHORT).show();
+					LogController.appendFile("Started supervising " + bluetoothDevice.getName());
 				}
 			}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
@@ -84,6 +85,7 @@ public class DevicesController {
 				public void onClick(DialogInterface dialog, int id) {
 					DevicesMonitor.getSupervisedDevices().remove(bluetoothDevice);
 					Toast.makeText(context, "Stopped supervising " + bluetoothDevice.getName(), Toast.LENGTH_SHORT).show();
+					LogController.appendFile("Stopped supervising " + bluetoothDevice.getName());
 				}
 			}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {

@@ -56,6 +56,7 @@ public class DataController {
 
     private static void updateGPSViews(Location location, TextView name, ProgressBar progressBar) {
 	name.setText("[Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]");
+	LogController.appendFile("My device GPS update - [Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]");
 	progressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -69,6 +70,7 @@ public class DataController {
 		Sensor mySensor = sensorEvent.sensor;
 		if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 		    strength.setText("X=" + String.valueOf(sensorEvent.values[0]) + "Y=" + String.valueOf(sensorEvent.values[1]) + "Z=" + String.valueOf(sensorEvent.values[2]));
+		    LogController.appendFile("My device Accelerometer update - X=" + String.valueOf(sensorEvent.values[0]) + "Y=" + String.valueOf(sensorEvent.values[1]) + "Z=" + String.valueOf(sensorEvent.values[2]));
 		}
 	    }
 
