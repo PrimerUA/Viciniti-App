@@ -45,6 +45,7 @@ public class BluetoothController {
 	    enableBtIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, VicinityConstants.DISCOVERABLE_DURATION);
 	    context.startActivity(enableBtIntent);
 	    LogController.appendFile("Enabling bluetooth");
+	    scanBluetooth();
 	} else {
 	    Log.v("onCreate", "Bluetooth adapter is on");
 	    scanBluetooth();
