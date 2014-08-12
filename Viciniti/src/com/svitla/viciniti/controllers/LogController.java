@@ -1,6 +1,7 @@
 package com.svitla.viciniti.controllers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 import com.svitla.viciniti.VicinityConstants;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Environment;
 
@@ -32,7 +34,7 @@ public class LogController {
 	}
 
 	private static String getFormattedCurrentData() {
-		return new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(new Date());
+		return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
 	}
 
 	public static void appendFile(String logEntry) {
@@ -47,44 +49,15 @@ public class LogController {
 
 			fos.close();
 
-			Toast.makeText(this, "Backup Complete", Toast.LENGTH_SHORT).show();
-
 		} catch (FileNotFoundException e) {
 
 			e.printStackTrace();
 
-			AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(this);
-
-			delmessagebuilder.setCancelable(false);
-
-			delmessagebuilder.setMessage("File Access Error");
-
-			delmessagebuilder.setNeutralButton("Okay", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.dismiss();
-				}
-			});
-
-			delmessagebuilder.create().show();
-
 		} catch (IOException e) {
 
 			e.printStackTrace();
-
-			AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(this);
-
-			delmessagebuilder.setCancelable(false);
-
-			delmessagebuilder.setMessage("File Access Error");
-
-			delmessagebuilder.setNeutralButton("Okay", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.dismiss();
-				}
-			});
-
-			delmessagebuilder.create().show();
 		}
+
 	}
 
 }
