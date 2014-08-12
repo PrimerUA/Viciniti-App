@@ -1,5 +1,7 @@
 package com.svitla.viciniti.controllers;
 
+import java.util.Date;
+
 import com.svitla.viciniti.VicinityConstants;
 
 import android.app.Service;
@@ -19,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DataController {
+
+    private static long lastUpdateDate = new Date().getTime();
 
     public static void requestGPSData(ActionBarActivity activity, final TextView name, final ProgressBar progressBar) {
 	progressBar.setVisibility(View.VISIBLE);
@@ -51,11 +55,11 @@ public class DataController {
 	} else {
 	    updateGPSViews(location, name, progressBar);
 	}
-
     }
 
     private static void updateGPSViews(Location location, TextView name, ProgressBar progressBar) {
 	name.setText("[Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]");
+	LogController.appendFile("My device GPS update - [Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]");
 	progressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -69,6 +73,11 @@ public class DataController {
 		Sensor mySensor = sensorEvent.sensor;
 		if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 		    strength.setText("X=" + String.valueOf(sensorEvent.values[0]) + "Y=" + String.valueOf(sensorEvent.values[1]) + "Z=" + String.valueOf(sensorEvent.values[2]));
+		    if (new Date().getTime() - lastUpdateDate > VicinityConstants.LOG_UPDATE_SENSOR_INTERVAL) {
+			LogController.appendFile("My device Accelerometer update - X=" + String.valueOf(sensorEvent.values[0]) + "Y=" + String.valueOf(sensorEvent.values[1]) + "Z="
+				+ String.valueOf(sensorEvent.values[2]));
+			lastUpdateDate = new Date().getTime();
+		    }
 		}
 	    }
 
@@ -77,5 +86,4 @@ public class DataController {
 	    }
 	}, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
-
 }

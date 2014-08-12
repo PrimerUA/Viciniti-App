@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Viciniti</string>
+    <string name="build_version">0.1.350</string>
     <string name="placeholder_fragment_title">Available devices</string>
     <string name="levels_fragment_title">Security levels</string>
     <string name="details_fragment_title">Device details</string>
