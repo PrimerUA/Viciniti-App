@@ -50,7 +50,6 @@ public class LogController {
     }
 
     public static void appendFile(String logEntry, boolean showToast) {
-
 	FileOutputStream fos;
 	try {
 	    fos = new FileOutputStream(pathFile, true);
@@ -60,13 +59,12 @@ public class LogController {
 	    fos.write("\n".getBytes());
 
 	    fos.close();
-	    
+
 	    if (showToast)
 		Toast.makeText(context, "Log updated", Toast.LENGTH_SHORT).show();
 	} catch (FileNotFoundException e) {
 
 	    e.printStackTrace();
-
 	    AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(context);
 
 	    delmessagebuilder.setCancelable(false);
@@ -100,5 +98,4 @@ public class LogController {
 	    delmessagebuilder.create().show();
 	}
     }
-
 }
