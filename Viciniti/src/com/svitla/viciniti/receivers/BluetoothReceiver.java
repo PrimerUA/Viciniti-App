@@ -29,9 +29,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
 	    BluetoothDevice bDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 	    if (!DevicesMonitor.getDevices().contains(bDevice)) { // new device found
 		DevicesMonitor.getDevices().add(bDevice);
-		LogController.appendFile("New device detected:" + bDevice.getName() + " (" + bDevice.getAddress() + ") RSSI: "+ rssi);
+		LogController.appendFile("New device detected:" + bDevice.getName() + " (" + bDevice.getAddress() + ") RSSI: "+ rssi, true);
 	    } else {
-		LogController.appendFile("Device: " + bDevice.getName() + " (" + bDevice.getAddress() + ") RSSI update: "+ rssi);
+		LogController.appendFile("Device: " + bDevice.getName() + " (" + bDevice.getAddress() + ") RSSI update: "+ rssi, true);
 	    }
 	    if (SignalMonitor.getMonitorArray().size() == 0) { // initialize signal array (first scan)
 		SignalArray newSignalArray = new SignalArray();
@@ -63,7 +63,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 	    Toast.makeText(context, "Discovery round finished", Toast.LENGTH_SHORT).show();
 	    BluetoothController.getArrayAdapter().clear();
 	    DevicesMonitor.getDevices().clear();
-	    LogController.appendFile("Discovery round finished");
+	    LogController.appendFile("Discovery round finished", true);
 	}
 	if (BluetoothController.isScanning())
 	    BluetoothController.enableBluetoothAndScan();

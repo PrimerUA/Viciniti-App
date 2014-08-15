@@ -19,6 +19,6 @@ public class VicinityConstants {
     
     public final static String VICINITI_DIR = Environment.getExternalStorageDirectory().getPath() + "/viciniti/";
     
-    public final static int LOG_UPDATE_SENSOR_INTERVAL = 10000; // 10 seconds
+    public final static int LOG_UPDATE_SENSOR_INTERVAL = 1000; // 1 second
 
 }

@@ -44,7 +44,7 @@ public class BluetoothController {
 	    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 	    enableBtIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, VicinityConstants.DISCOVERABLE_DURATION);
 	    context.startActivity(enableBtIntent);
-	    LogController.appendFile("Enabling bluetooth");
+	    LogController.appendFile("Enabling bluetooth", true);
 	    scanBluetooth();
 	} else {
 	    Log.v("onCreate", "Bluetooth adapter is on");
@@ -63,7 +63,7 @@ public class BluetoothController {
 	if (bluetoothAdapter.isDiscovering())
 	    return;
 	Toast.makeText(context, "Scanning...", Toast.LENGTH_SHORT).show();
-	LogController.appendFile("Discovery started");
+	LogController.appendFile("Discovery started", true);
 	bluetoothAdapter.startDiscovery();
     }
 
@@ -72,7 +72,7 @@ public class BluetoothController {
 	    isScanning = false;
 	    bluetoothAdapter.cancelDiscovery();
 	    Toast.makeText(context, "Scanning stopped", Toast.LENGTH_SHORT).show();
-	    LogController.appendFile("Discovery stopped");
+	    LogController.appendFile("Discovery stopped", true);
 	    if (refreshLayout.isRefreshing())
 		refreshLayout.setRefreshing(false);
 	}

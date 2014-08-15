@@ -130,7 +130,7 @@ public class MenuController {
 			if (isUniqueLevel(Integer.valueOf(strength.getText().toString()))) {
 			    Level level = new Level(name.getText().toString(), Integer.valueOf(strength.getText().toString()));
 			    LevelsMonitor.getLevels().add(level);
-			    LogController.appendFile("New security level added: " + level.getName() + " (" + level.getLevel() + ")");
+			    LogController.appendFile("New security level added: " + level.getName() + " (" + level.getLevel() + ")", true);
 			    LevelsListFragment levelsListFragment = (LevelsListFragment) activity.getSupportFragmentManager().findFragmentById(R.id.container);
 			    levelsListFragment.refreshList();
 			    addDialog.dismiss();

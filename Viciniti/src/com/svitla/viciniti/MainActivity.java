@@ -21,6 +21,7 @@ import com.bugsense.trace.BugSenseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.svitla.viciniti.controllers.BluetoothController;
+import com.svitla.viciniti.controllers.DataController;
 import com.svitla.viciniti.controllers.LogController;
 import com.svitla.viciniti.controllers.MenuController;
 import com.svitla.viciniti.controllers.PlotController;
@@ -56,7 +57,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 	BluetoothController.init(this, mRefreshLayout);
 	BluetoothController.enableBluetoothAndScan();
-
+	DataController.requestGPSData(this, null, null);
+	DataController.requestAccelerometerData(this, null);
+	
 	// final ActionBar actionBar = getSupportActionBar();
 	// actionBar.setDisplayShowTitleEnabled(false);
 	// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -188,10 +191,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	    BluetoothController.scanBluetooth();
 	}
 	if (requestCode == VicinityConstants.GPS_ENABLED_CODE) {
+	    DataController.requestGPSData(this, null, null);
 	    Toast.makeText(this, "GPS enabled, waiting for location...", Toast.LENGTH_SHORT).show();
 	}
-	if (requestCode != VicinityConstants.GPS_ENABLED_CODE && resultCode == Activity.RESULT_CANCELED)
+	if (requestCode != VicinityConstants.GPS_ENABLED_CODE && resultCode == Activity.RESULT_CANCELED) {
 	    BluetoothController.enableBluetoothAndScan();
+	}
     }
 
     @Override
@@ -206,6 +211,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public void onDestroy() {
 	super.onDestroy();
 	unregisterReceiver(mReceiver);
+	LogController.appendFile("Application closed", true);
     }
 
 }

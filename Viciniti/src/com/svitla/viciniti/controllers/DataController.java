@@ -25,7 +25,8 @@ public class DataController {
     private static long lastUpdateDate = new Date().getTime();
 
     public static void requestGPSData(ActionBarActivity activity, final TextView name, final ProgressBar progressBar) {
-	progressBar.setVisibility(View.VISIBLE);
+	if (progressBar != null)
+	    progressBar.setVisibility(View.VISIBLE);
 	LocationManager locationManager = (LocationManager) activity.getSystemService(Service.LOCATION_SERVICE);
 	if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 	    Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -58,9 +59,11 @@ public class DataController {
     }
 
     private static void updateGPSViews(Location location, TextView name, ProgressBar progressBar) {
-	name.setText("[Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]");
-	LogController.appendFile("My device GPS update - [Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]");
-	progressBar.setVisibility(View.INVISIBLE);
+	if (name != null && progressBar != null) {
+	    name.setText("[Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]");
+	    progressBar.setVisibility(View.INVISIBLE);
+	}
+	LogController.appendFile("My device GPS update - [Lat: " + location.getLatitude() + ", Long: " + location.getLongitude() + "]", true);
     }
 
     public static void requestAccelerometerData(Context context, final TextView strength) {
@@ -72,10 +75,11 @@ public class DataController {
 	    public void onSensorChanged(SensorEvent sensorEvent) {
 		Sensor mySensor = sensorEvent.sensor;
 		if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-		    strength.setText("X=" + String.valueOf(sensorEvent.values[0]) + "Y=" + String.valueOf(sensorEvent.values[1]) + "Z=" + String.valueOf(sensorEvent.values[2]));
+		    if (strength != null)
+			strength.setText("X=" + String.valueOf(sensorEvent.values[0]) + " Y=" + String.valueOf(sensorEvent.values[1]) + " Z=" + String.valueOf(sensorEvent.values[2]));
 		    if (new Date().getTime() - lastUpdateDate > VicinityConstants.LOG_UPDATE_SENSOR_INTERVAL) {
-			LogController.appendFile("My device Accelerometer update - X=" + String.valueOf(sensorEvent.values[0]) + "Y=" + String.valueOf(sensorEvent.values[1]) + "Z="
-				+ String.valueOf(sensorEvent.values[2]));
+			LogController.appendFile("My device Accelerometer update - X=" + String.valueOf(sensorEvent.values[0]) + " Y=" + String.valueOf(sensorEvent.values[1]) + " Z="
+				+ String.valueOf(sensorEvent.values[2]), false);
 			lastUpdateDate = new Date().getTime();
 		    }
 		}

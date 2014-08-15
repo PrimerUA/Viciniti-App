@@ -30,7 +30,7 @@ public class LogController {
 	try {
 	    pathFile = new File(directory.getAbsoluteFile() + "/log_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + ".txt");
 	    pathFile.createNewFile();
-	    appendFile("App launched. " + getBuildVersion() + ". LogFile created");
+	    appendFile("App launched on device:\n" + context.getApplicationInfo() + "\nApp version - " + getBuildVersion() + ". LogFile created", true);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -49,7 +49,7 @@ public class LogController {
 	return new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(new Date());
     }
 
-    public static void appendFile(String logEntry) {
+    public static void appendFile(String logEntry, boolean showToast) {
 
 	FileOutputStream fos;
 	try {
@@ -60,9 +60,9 @@ public class LogController {
 	    fos.write("\n".getBytes());
 
 	    fos.close();
-
-	    Toast.makeText(context, "Log updated", Toast.LENGTH_SHORT).show();
-
+	    
+	    if (showToast)
+		Toast.makeText(context, "Log updated", Toast.LENGTH_SHORT).show();
 	} catch (FileNotFoundException e) {
 
 	    e.printStackTrace();
