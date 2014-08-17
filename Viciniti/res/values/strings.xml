@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Viciniti</string>
-    <string name="build_version">0.1.375</string>
+    <string name="build_version">0.1.399</string>
     <string name="placeholder_fragment_title">Available devices</string>
     <string name="levels_fragment_title">Security levels</string>
     <string name="details_fragment_title">Device details</string>
@@ -23,5 +23,8 @@
     <string name="accelerometer_text">Accelerometer data:</string>
     <string name="choose_photo_text">Take photo</string>
     <string name="closeButtonText">Close plot</string>
+    <string name="logged_in_text">You are logged in</string>
+    <string name="set_to_text">Set to</string>
+    <string name="connected_to_text">Connected to</string>
 
 </resources>
