@@ -42,14 +42,14 @@ public class PlotController {
 		if (graphView != null)
 			contentLayout.removeView(graphView);
 		localSignalArray = SignalMonitor.getArrayByDevice(bluetoothDevice);
-		GraphViewData zeroData = new GraphViewData(0,0);
-		GraphViewSeries levelSeries = new GraphViewSeries(new GraphViewData[] { zeroData });
-		for (int i = 1; i < LevelsMonitor.getLevels().size(); i++) {
-			for (int j = 1; j < VicinityConstants.PLOT_COLUMNS_NUMBER; j++) {
-				GraphViewData data = new GraphViewData(j, LevelsMonitor.getLevels().get(i).getLevel());
-				levelSeries.appendData(data, false, VicinityConstants.PLOT_COLUMNS_NUMBER);
-			}
-		}
+//		GraphViewData zeroData = new GraphViewData(0,0);
+//		GraphViewSeries levelSeries = new GraphViewSeries(new GraphViewData[] { zeroData });
+//		for (int i = 1; i < LevelsMonitor.getLevels().size(); i++) {
+//			for (int j = 1; j < VicinityConstants.PLOT_COLUMNS_NUMBER; j++) {
+//				GraphViewData data = new GraphViewData(j, LevelsMonitor.getLevels().get(i).getLevel());
+//				levelSeries.appendData(data, false, VicinityConstants.PLOT_COLUMNS_NUMBER);
+//			}
+//		}
 		buildGraph();
 	}
 
