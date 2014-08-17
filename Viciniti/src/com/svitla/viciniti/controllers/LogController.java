@@ -65,12 +65,10 @@ public class LogController {
 	} catch (FileNotFoundException e) {
 
 	    e.printStackTrace();
+	    
 	    AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(context);
-
 	    delmessagebuilder.setCancelable(false);
-
 	    delmessagebuilder.setMessage("Error: Log file not found");
-
 	    delmessagebuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int id) {
 		    dialog.dismiss();
@@ -84,11 +82,8 @@ public class LogController {
 	    e.printStackTrace();
 
 	    AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(context);
-
 	    delmessagebuilder.setCancelable(false);
-
 	    delmessagebuilder.setMessage("Error: Log file access denied");
-
 	    delmessagebuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int id) {
 		    dialog.dismiss();
