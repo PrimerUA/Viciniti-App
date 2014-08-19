@@ -93,4 +93,8 @@ public class LogController {
 	    delmessagebuilder.create().show();
 	}
     }
+    
+    public static File getFilePath() {
+	return pathFile;
+    }
 }

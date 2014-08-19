@@ -49,14 +49,12 @@ public class PreferencesController {
 
 	private static void ifEmptyLevels() {
 		if (LevelsMonitor.getLevels().size() == 0) {
-			Level levelA = new Level("Zone A+", 200);
+			Level levelA = new Level("Zone A", -75);
 			LevelsMonitor.getLevels().add(levelA);
-			Level levelB = new Level("Zone B+", 150);
+			Level levelB = new Level("Zone B", -100);
 			LevelsMonitor.getLevels().add(levelB);
-			Level levelAmin = new Level("Zone A-", -50);
-			LevelsMonitor.getLevels().add(levelAmin);
-			Level levelBmin = new Level("Zone B-", -100);
-			LevelsMonitor.getLevels().add(levelBmin);
+			Level levelC = new Level("Zone C", -150);
+			LevelsMonitor.getLevels().add(levelC);
 		}
 	}
 

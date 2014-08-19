@@ -13,8 +13,15 @@
     <item
         android:id="@+id/action_add_level"
         android:icon="@android:drawable/ic_input_add"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="@string/action_add_level"
         app:showAsAction="always"/>
+    
+    <item
+            android:id="@+id/action_log_file"
+            android:icon="@android:drawable/ic_input_get"
+            android:orderInCategory="102"
+            android:title="@string/action_log_file"
+            app:showAsAction="ifRoom"/>
 
 </menu>

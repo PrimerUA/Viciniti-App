@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Viciniti</string>
-    <string name="build_version">0.1.399</string>
+    <string name="build_version">0.1.400</string>
     <string name="placeholder_fragment_title">Available devices</string>
     <string name="levels_fragment_title">Security levels</string>
     <string name="details_fragment_title">Device details</string>
@@ -13,6 +13,7 @@
     <string name="action_list_level">Browse zones</string>
     <string name="action_scan_controller">Toggle scan</string>
     <string name="action_device_status">Device status</string>
+    <string name="action_log_file">Open log file</string>
     <string name="devices_not_found">Devices not found</string>
     <string name="back">Back</string>
     <string name="add_text">Add new security zone:</string>

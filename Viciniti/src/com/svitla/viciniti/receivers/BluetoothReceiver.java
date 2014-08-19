@@ -2,11 +2,13 @@ package com.svitla.viciniti.receivers;
 
 import java.util.ArrayList;
 
+import com.svitla.viciniti.R;
 import com.svitla.viciniti.beans.Signal;
 import com.svitla.viciniti.beans.SignalArray;
 import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.DevicesController;
 import com.svitla.viciniti.controllers.LogController;
+import com.svitla.viciniti.controllers.MenuController;
 import com.svitla.viciniti.controllers.PlotController;
 import com.svitla.viciniti.monitor.DevicesMonitor;
 import com.svitla.viciniti.monitor.SignalMonitor;
@@ -57,6 +59,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 	    BluetoothController.updateDeviceList(bDevice.getName() + " - " + " RSSI: " + rssi + "dBm"); // update rssi on the main screen
 	    if (DevicesMonitor.getSupervisedDevices().size() > 0 && DevicesMonitor.getSupervisedDevices().contains(bDevice)) // if this device is supervised
 		DevicesController.checkSupervisedDevices(context, rssi, bDevice); // perform rssi level check
+	    if (MenuController.DeviceStatus.getAlarmLayout() != null)
+		    MenuController.DeviceStatus.getAlarmLayout().setBackgroundResource(R.color.dialog_background);
 	    Toast.makeText(context, "Data updated", Toast.LENGTH_SHORT).show();
 	    
 	} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {

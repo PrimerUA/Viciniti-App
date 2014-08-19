@@ -1,9 +1,12 @@
 package com.svitla.viciniti;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -15,11 +18,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.DataController;
 import com.svitla.viciniti.controllers.LogController;
@@ -48,8 +50,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	PreferencesController.init(this);
 	LogController.init(this);
 	LogController.showBuildVersionToast();
-	ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(this);
-	ImageLoader.getInstance().init(config);
 
 	mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
 	mRefreshLayout.setColorSchemeColors(Color.YELLOW, Color.BLACK, Color.WHITE, Color.BLACK);
@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	BluetoothController.enableBluetoothAndScan();
 	DataController.requestGPSData(this, null, null);
 	DataController.requestAccelerometerData(this, null);
-	
+
 	// final ActionBar actionBar = getSupportActionBar();
 	// actionBar.setDisplayShowTitleEnabled(false);
 	// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -80,8 +80,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	registerReceiver(mReceiver, discoveryFinished);
 	IntentFilter rssiChanged = new IntentFilter(WifiManager.RSSI_CHANGED_ACTION);
 	registerReceiver(mReceiver, rssiChanged);
-//	IntentFilter scanModeChanged = new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
-//	registerReceiver(mReceiver, scanModeChanged);
+	// IntentFilter scanModeChanged = new
+	// IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
+	// registerReceiver(mReceiver, scanModeChanged);
     }
 
     @Override
@@ -122,7 +123,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	    else
 		item.setIcon(android.R.drawable.ic_media_play);
 	} else if (id == R.id.action_device_status) {
-	    MenuController.deviceStatus(this);
+	    MenuController.DeviceStatus.showDeviceStatus(this);
+	} else if (id == R.id.action_log_file) {
+	    MenuController.openLogFolder(this);
 	} else {
 	    showFragment(VicinityConstants.FRAGMENT_MAIN, 0);
 	}
@@ -186,7 +189,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	//super.onActivityResult(requestCode, resultCode, data);
+	// super.onActivityResult(requestCode, resultCode, data);
 	if (resultCode == VicinityConstants.DISCOVERABLE_DURATION) {
 	    BluetoothController.scanBluetooth();
 	}
@@ -204,7 +207,44 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	if (currentFragment != VicinityConstants.FRAGMENT_MAIN)
 	    showFragment(VicinityConstants.FRAGMENT_MAIN, 0);
 	else
-	    finish();
+	    showExitDialog();
+    }
+
+    private void showExitDialog() {
+	Builder exitDialog = new AlertDialog.Builder(this);
+	exitDialog.setTitle("Exit application?");
+	exitDialog.setCancelable(true);
+	exitDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+	    @Override
+	    public void onClick(DialogInterface dialog, int which) {
+		dialog.cancel();
+		finish();
+	    }
+	});
+	exitDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+	    @Override
+	    public void onClick(DialogInterface dialog, int which) {
+		dialog.cancel();
+	    }
+	});
+	if (BluetoothController.isScanning()) {
+	    exitDialog.setMessage("Device discovery is running - it will continue working in background. Press 'Stop scan and exit' to dismiss all background operations");
+	    exitDialog.setNeutralButton("Stop scan and exit", new DialogInterface.OnClickListener() {
+
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+		    BluetoothController.stopBluetooth();
+		    dialog.cancel();
+		    finish();
+		}
+	    });
+	} else {
+	    exitDialog.setMessage("Discovery is off. You may exit");
+	}
+
+	exitDialog.show();
     }
 
     @Override
