@@ -57,10 +57,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
 	    if (PlotController.isActive()) // user is on the selected device plot
 		PlotController.updateData(); // show him new data
 	    BluetoothController.updateDeviceList(bDevice.getName() + " - " + " RSSI: " + rssi + "dBm"); // update rssi on the main screen
-	    if (DevicesMonitor.getSupervisedDevices().size() > 0 && DevicesMonitor.getSupervisedDevices().contains(bDevice)) // if this device is supervised
-		DevicesController.checkSupervisedDevices(context, rssi, bDevice); // perform rssi level check
 	    if (MenuController.DeviceStatus.getAlarmLayout() != null)
 		    MenuController.DeviceStatus.getAlarmLayout().setBackgroundResource(R.color.dialog_background);
+	    if (DevicesMonitor.getSupervisedDevices().size() > 0 && DevicesMonitor.getSupervisedDevices().contains(bDevice)) // if this device is supervised
+		DevicesController.checkSupervisedDevices(context, rssi, bDevice); // perform rssi level check
 	    Toast.makeText(context, "Data updated", Toast.LENGTH_SHORT).show();
 	    
 	} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
