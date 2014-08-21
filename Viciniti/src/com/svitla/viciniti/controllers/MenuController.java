@@ -3,11 +3,14 @@ package com.svitla.viciniti.controllers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -76,6 +79,19 @@ public class MenuController {
 		    choosePhoto(activity);
 		}
 	    });
+	    deviceStatusView.findViewById(R.id.shareLog).setOnClickListener(new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+		    Intent intent = new Intent();
+		    intent.setAction(Intent.ACTION_SEND);
+		    intent.setType("text/plain");
+		    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogController.getFilePath()));
+		    activity.startActivity(intent);
+		    addDialog.dismiss();
+		    // sendLogFile(activity, intent); //test this too!
+		}
+	    });
 	    addDialog.show();
 
 	    LinearLayout plotLayout = (LinearLayout) deviceStatusView.findViewById(R.id.plotLayout);
@@ -88,6 +104,36 @@ public class MenuController {
 		plotLayout.setVisibility(View.GONE);
 	    }
 
+	}
+
+	private static void sendLogFile(ActionBarActivity activity, Intent intent) {
+	    // list of apps that can handle our intent
+	    PackageManager pm = activity.getPackageManager();
+	    List<ResolveInfo> appsList = pm.queryIntentActivities(intent, 0);
+
+	    if (appsList.size() > 0) {
+		// select bluetooth
+		String packageName = null;
+		String className = null;
+		boolean found = false;
+
+		for (ResolveInfo info : appsList) {
+		    packageName = info.activityInfo.packageName;
+		    if (packageName.equals("com.android.bluetooth")) {
+			className = info.activityInfo.name;
+			found = true;
+			break;// found
+		    }
+		}
+		if (!found) {
+		    Toast.makeText(activity, "Bluetooth not found", Toast.LENGTH_SHORT).show();
+		    // exit
+		    return;
+		} else {
+		    intent.setClassName(packageName, className);
+		    activity.startActivity(intent);
+		}
+	    }
 	}
 
 	private static void choosePhoto(ActionBarActivity activity) {

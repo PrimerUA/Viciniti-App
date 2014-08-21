@@ -27,5 +27,6 @@
     <string name="logged_in_text">You are logged in</string>
     <string name="set_to_text">Set to</string>
     <string name="connected_to_text">Connected to</string>
+    <string name="share_logfile_text">Share Log</string>
 
 </resources>

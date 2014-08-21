@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/d5p"
         android:gravity="center" >
 
         <ImageView
@@ -27,14 +28,6 @@
             android:text="@string/logged_in_text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/choosePhoto"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/d5p"
-        android:text="@string/choose_photo_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -115,10 +108,31 @@
         android:orientation="vertical" >
     </LinearLayout>
 
-    <Button
-        android:id="@+id/okButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@android:string/ok" />
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/choosePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/choose_photo_text" />
+
+        <Button
+            android:id="@+id/shareLog"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/share_logfile_text" />
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@android:string/ok"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </LinearLayout>
