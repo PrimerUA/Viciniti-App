@@ -82,7 +82,7 @@ public class MenuController {
 	    deviceStatusView.findViewById(R.id.shareLog).setOnClickListener(new OnClickListener() {
 
 		@Override
-		public void onClick(View v) {
+		public void onClick(View v) { //test this!
 		    Intent intent = new Intent();
 		    intent.setAction(Intent.ACTION_SEND);
 		    intent.setType("text/plain");
