@@ -132,7 +132,6 @@
             android:layout_height="match_parent"
             android:text="@android:string/ok"
             android:textStyle="bold" />
-
     </LinearLayout>
 
 </LinearLayout>
