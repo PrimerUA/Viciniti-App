@@ -18,83 +18,83 @@ import com.svitla.viciniti.VicinityConstants;
 
 public class LogController {
 
-    private static Context context;
-    private static File pathFile;
+	private static Context context;
+	private static File pathFile;
 
-    public static void init(Context context) {
-	LogController.context = context;
-	File directory = new File(VicinityConstants.VICINITI_DIR + "logs/");
-	if (!directory.exists()) {
-	    directory.mkdirs();
-	}
-	try {
-	    pathFile = new File(directory.getAbsoluteFile() + "/log_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + ".txt");
-	    pathFile.createNewFile();
-	    appendFile("App launched on device:\n" + context.getApplicationInfo() + "\nApp version - " + getBuildVersion() + ". LogFile created", true);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-    }
-
-    public static String getBuildVersion() {
-	return "Build version: " + context.getString(R.string.build_version);
-    }
-
-    public static void showBuildVersionToast() {
-	Toast.makeText(context, getBuildVersion(), Toast.LENGTH_SHORT).show();
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private static String getFormattedCurrentData() {
-	return new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(new Date());
-    }
-
-    public static void appendFile(String logEntry, boolean showToast) {
-	FileOutputStream fos;
-	try {
-	    fos = new FileOutputStream(pathFile, true);
-
-	    fos.write((getFormattedCurrentData() + " - ").getBytes());
-	    fos.write(logEntry.toString().getBytes());
-	    fos.write("\n".getBytes());
-
-	    fos.close();
-
-	    if (showToast)
-		Toast.makeText(context, "Log updated", Toast.LENGTH_SHORT).show();
-	} catch (FileNotFoundException e) {
-
-	    e.printStackTrace();
-	    
-	    AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(context);
-	    delmessagebuilder.setCancelable(false);
-	    delmessagebuilder.setMessage("Error: Log file not found");
-	    delmessagebuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int id) {
-		    dialog.dismiss();
+	public static void init(Context context) {
+		LogController.context = context;
+		File directory = new File(VicinityConstants.VICINITI_DIR + "logs/");
+		if (!directory.exists()) {
+			directory.mkdirs();
 		}
-	    });
-
-	    delmessagebuilder.create().show();
-
-	} catch (IOException e) {
-
-	    e.printStackTrace();
-
-	    AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(context);
-	    delmessagebuilder.setCancelable(false);
-	    delmessagebuilder.setMessage("Error: Log file access denied");
-	    delmessagebuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int id) {
-		    dialog.dismiss();
+		try {
+			pathFile = new File(directory.getAbsoluteFile() + "/log_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + ".txt");
+			pathFile.createNewFile();
+			appendFile("App launched on device:\n" + context.getApplicationInfo() + "\nApp version - " + getBuildVersion() + ". LogFile created", false);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-	    });
-
-	    delmessagebuilder.create().show();
 	}
-    }
-    
-    public static File getFilePath() {
-	return pathFile;
-    }
+
+	public static String getBuildVersion() {
+		return "Build version: " + context.getString(R.string.build_version);
+	}
+
+	public static void showBuildVersionToast() {
+		Toast.makeText(context, getBuildVersion(), Toast.LENGTH_SHORT).show();
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	private static String getFormattedCurrentData() {
+		return new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(new Date());
+	}
+
+	public static void appendFile(String logEntry, boolean showToast) {
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(pathFile, true);
+
+			fos.write((getFormattedCurrentData() + " - ").getBytes());
+			fos.write(logEntry.toString().getBytes());
+			fos.write("\n".getBytes());
+
+			fos.close();
+
+			if (showToast)
+				Toast.makeText(context, "Log updated", Toast.LENGTH_SHORT).show();
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+
+			AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(context);
+			delmessagebuilder.setCancelable(false);
+			delmessagebuilder.setMessage("Error: Log file not found");
+			delmessagebuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.dismiss();
+				}
+			});
+
+			delmessagebuilder.create().show();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+			AlertDialog.Builder delmessagebuilder = new AlertDialog.Builder(context);
+			delmessagebuilder.setCancelable(false);
+			delmessagebuilder.setMessage("Error: Log file access denied");
+			delmessagebuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.dismiss();
+				}
+			});
+
+			delmessagebuilder.create().show();
+		}
+	}
+
+	public static File getFilePath() {
+		return pathFile;
+	}
 }

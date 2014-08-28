@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Viciniti</string>
-    <string name="build_version">0.1.439</string>
+    <string name="build_version">0.1.450</string>
     <string name="placeholder_fragment_title">Available devices</string>
     <string name="levels_fragment_title">Security levels</string>
     <string name="details_fragment_title">Device details</string>
@@ -20,13 +20,14 @@
     <string name="empty_fields">Fill in empty fields</string>
     <string name="zone_name_hint">Zone name</string>
     <string name="zone_level_hint">Security radius (in dBm)</string>
-    <string name="gps_text">GPS data:</string>
-    <string name="accelerometer_text">Accelerometer data:</string>
+    <string name="gps_text">GPS:</string>
+    <string name="accelerometer_text">Accelerometer:</string>
     <string name="choose_photo_text">Take photo</string>
     <string name="closeButtonText">Close plot</string>
     <string name="logged_in_text">You are logged in</string>
     <string name="set_to_text">Set to</string>
-    <string name="connected_to_text">Connected to</string>
+    <string name="connected_to_text">Connected to:</string>
     <string name="share_logfile_text">Share Log</string>
+    <string name="hint_text">Note: The lower the graph - the nearer supervised device is</string>
 
 </resources>

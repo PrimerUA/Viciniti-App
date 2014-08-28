@@ -11,7 +11,6 @@ import com.jjoe64.graphview.GraphViewSeries;
 import com.svitla.viciniti.R;
 import com.svitla.viciniti.VicinityConstants;
 import com.svitla.viciniti.beans.SignalArray;
-import com.svitla.viciniti.monitor.LevelsMonitor;
 import com.svitla.viciniti.monitor.SignalMonitor;
 
 public class PlotController {
@@ -33,7 +32,7 @@ public class PlotController {
 		localSignalArray = SignalMonitor.getArrayByDevice(bDevice);
 		graphView = new BarGraphView(context, localSignalArray.getBluetoothDevice().getName());
 		graphView.getGraphViewStyle().setTextSize(context.getResources().getDimension(R.dimen.d15p));
-		GraphViewData data = new GraphViewData(columnQuantity++, localSignalArray.getSignalArray().get(0).getRssi());
+		GraphViewData data = new GraphViewData(columnQuantity++, Math.abs(localSignalArray.getSignalArray().get(0).getRssi()));
 		strengthSeries = new GraphViewSeries(new GraphViewData[] { data });
 		buildGraph();
 	}
@@ -55,7 +54,7 @@ public class PlotController {
 
 	private static void buildGraph() {
 		for (int i = 1; i < localSignalArray.getSignalArray().size(); i++) {
-			GraphViewData data = new GraphViewData(columnQuantity++, localSignalArray.getSignalArray().get(i).getRssi());
+			GraphViewData data = new GraphViewData(columnQuantity++, Math.abs(localSignalArray.getSignalArray().get(i).getRssi()));
 			strengthSeries.appendData(data, false, VicinityConstants.PLOT_COLUMNS_NUMBER);
 		}
 		graphView.addSeries(strengthSeries);

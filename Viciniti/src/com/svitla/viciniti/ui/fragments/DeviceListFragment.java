@@ -57,7 +57,8 @@ public class DeviceListFragment extends Fragment {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				MenuController.plotControll(mainActivity, DevicesMonitor.getDevices().get(position));
+				if (DevicesMonitor.getDevices().size() > position)
+					MenuController.plotControll(mainActivity, DevicesMonitor.getDevices().get(position));
 				return true;
 			}
 		});

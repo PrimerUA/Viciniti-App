@@ -252,7 +252,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	public void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(mReceiver);
-		LogController.appendFile("Application closed", true);
+		LogController.appendFile("Application closed", false);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.svitla.viciniti.controllers;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import com.svitla.viciniti.VicinityConstants;
@@ -34,7 +35,7 @@ public class DataController {
 		}
 		final Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (location == null && locationManager != null) {
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, new LocationListener() {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
 
 				@Override
 				public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -59,8 +60,8 @@ public class DataController {
 	}
 
 	private static void updateGPSViews(Location location, TextView name, ProgressBar progressBar) {
-		double longitude = (double) Math.round(location.getLongitude() * 10000) / 10000;
-		double latitude = (double) Math.round(location.getLatitude() * 10000) / 10000;
+		double longitude = (double) Math.round(location.getLongitude()* 10000) / 10000;
+		double latitude = (double) Math.round(location.getLatitude()* 10000) / 10000;
 
 		if (name != null && progressBar != null) {
 			name.setText("[Lat: " + longitude + ", Long: " + latitude + "]");
@@ -80,9 +81,10 @@ public class DataController {
 
 			@Override
 			public void onSensorChanged(SensorEvent sensorEvent) {
-				float x = Math.round(sensorEvent.values[0] * 100) / 100;
-				float y = Math.round(sensorEvent.values[1] * 100) / 100;
-				float z = Math.round(sensorEvent.values[2] * 100) / 100;
+				DecimalFormat df = new DecimalFormat("0.0");
+				float x = sensorEvent.values[0];
+				float y = sensorEvent.values[1];
+				float z = sensorEvent.values[2];
 				if (prevX != x && prevY != y && prevZ != z) {
 					prevX = x;
 					prevY = y;
@@ -90,10 +92,10 @@ public class DataController {
 					Sensor mySensor = sensorEvent.sensor;
 					if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 						if (strength != null)
-							strength.setText("X=" + String.valueOf(x) + " Y=" + String.valueOf(y) + " Z=" + String.valueOf(z));
+							strength.setText("X=" + df.format(x) + " Y=" + df.format(y) + " Z=" + df.format(z));
 						if (new Date().getTime() - lastUpdateDate > VicinityConstants.LOG_UPDATE_SENSOR_INTERVAL) {
 							LogController.appendFile(
-									"My device Accelerometer update - X=" + String.valueOf(x) + " Y=" + String.valueOf(y) + " Z=" + String.valueOf(z), false);
+									"My device Accelerometer update - X=" + df.format(x) + " Y=" + df.format(y) + " Z=" + df.format(z), false);
 							lastUpdateDate = new Date().getTime();
 						}
 					}
