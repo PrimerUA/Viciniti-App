@@ -21,7 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bugsense.trace.BugSenseHandler;
+import com.splunk.mint.Mint;
 import com.svitla.viciniti.controllers.BluetoothController;
 import com.svitla.viciniti.controllers.DataController;
 import com.svitla.viciniti.controllers.LogController;
@@ -44,13 +44,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 
-		BugSenseHandler.initAndStartSession(this, "e29b01f9");
+		Mint.initAndStartSession(this, "e29b01f9");
+		Mint.enableDebug();
+		
+		setContentView(R.layout.activity_main);
 		PreferencesController.init(this);
 		LogController.init(this);
 		LogController.showBuildVersionToast();
-
+		
 		mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
 		mRefreshLayout.setColorSchemeColors(Color.YELLOW, Color.BLACK, Color.WHITE, Color.BLACK);
 		mRefreshLayout.setOnRefreshListener(this);
