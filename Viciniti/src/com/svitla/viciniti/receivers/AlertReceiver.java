@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 
 import com.svitla.viciniti.MainActivity;
-import com.svitla.viciniti.R;
 import com.svitla.viciniti.VicinityConstants;
 import com.svitla.viciniti.controllers.MenuController;
 import com.svitla.viciniti.controllers.NotificationController;
