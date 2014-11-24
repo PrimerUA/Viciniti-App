@@ -46,6 +46,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 		Mint.initAndStartSession(this, "e29b01f9");
 		Mint.enableDebug();
+		Mint.enableLogging(true);
+		Mint.setLogging("*:W");
 		
 		setContentView(R.layout.activity_main);
 		PreferencesController.init(this);
@@ -185,6 +187,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Mint.startSession(this);
 		PreferencesController.load();
 	}
 
@@ -255,5 +258,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 		unregisterReceiver(mReceiver);
 		LogController.appendFile("Application closed", false);
 	}
+	
+	    // Stop the session
+	    public void onStop() {
+	        super.onStop();
+	        Mint.closeSession(this);
+	    }
 
 }
