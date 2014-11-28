@@ -105,8 +105,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (currentFragment == VicinityConstants.FRAGMENT_MAIN)
+		if (currentFragment == VicinityConstants.FRAGMENT_MAIN) {
 			getMenuInflater().inflate(R.menu.main_menu, menu);
+			if (BluetoothController.isScanning())
+				menu.findItem(R.id.action_scan_controller).setIcon(android.R.drawable.ic_media_pause);
+			else
+				menu.findItem(R.id.action_scan_controller).setIcon(android.R.drawable.ic_media_play);
+		}
 		else if (currentFragment == VicinityConstants.FRAGMENT_LEVELS)
 			getMenuInflater().inflate(R.menu.add_level_menu, menu);
 		return true;
