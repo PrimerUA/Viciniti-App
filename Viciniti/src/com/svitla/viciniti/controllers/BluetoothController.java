@@ -63,7 +63,7 @@ public class BluetoothController {
 	if (bluetoothAdapter.isDiscovering())
 	    return;
 	Toast.makeText(context, "Scanning...", Toast.LENGTH_SHORT).show();
-	LogController.appendFile("Discovery started", true);
+	LogController.appendFile("Discovery started", false);
 	bluetoothAdapter.startDiscovery();
     }
 
@@ -72,7 +72,7 @@ public class BluetoothController {
 	    isScanning = false;
 	    bluetoothAdapter.cancelDiscovery();
 	    Toast.makeText(context, "Scanning stopped", Toast.LENGTH_SHORT).show();
-	    LogController.appendFile("Discovery stopped", true);
+	    LogController.appendFile("Discovery stopped", false);
 	    if (refreshLayout.isRefreshing())
 		refreshLayout.setRefreshing(false);
 	}
